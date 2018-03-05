@@ -9,13 +9,17 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class FlipperForward extends Command {
 
+	private long lastCall;
+	
 	public FlipperForward() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
+		lastCall = Long.MAX_VALUE;
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
+		lastCall = System.currentTimeMillis();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -25,7 +29,7 @@ public class FlipperForward extends Command {
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return Robot.FLIPPER.isForward() || Robot.oi.flipperCancelButton.get();
+		return Robot.FLIPPER.isForward() || (System.currentTimeMillis() - lastCall > 10000);
 	}
 
 	// Called once after isFinished returns true
